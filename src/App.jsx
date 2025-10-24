@@ -67,7 +67,7 @@ const ProjectPageLayout = () => (
 );
 
 function App() {
-  const [showWelcome, setShowWelcome] = useState(true); // Re-enable welcome screen
+  const [showWelcome, setShowWelcome] = useState(false); // Temporarily disable welcome screen to fix black screen
 
   return (
     <BrowserRouter>
