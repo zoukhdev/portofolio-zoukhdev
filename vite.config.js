@@ -1,6 +1,9 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
+// Force Vite to use JavaScript Rollup instead of native binaries
+process.env.VITE_ROLLUP_NATIVE = 'false'
+
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
@@ -24,5 +27,8 @@ export default defineConfig({
   },
   esbuild: {
     target: 'esnext',
+  },
+  define: {
+    'process.env.VITE_ROLLUP_NATIVE': JSON.stringify('false'),
   },
 })
