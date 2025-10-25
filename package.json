@@ -11,6 +11,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@babel/runtime": "^7.28.4",
     "@emailjs/browser": "^4.4.1",
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
@@ -32,7 +33,6 @@
     "react-dom": "^18.3.1",
     "react-intersection-observer": "^9.13.1",
     "react-router-dom": "^6.28.0",
-    "react-swipeable-views-react-18-fix": "^0.14.0",
     "styled-components": "^6.1.13",
     "sweetalert2": "^11.15.0",
     "tailwind-merge": "^2.5.5",

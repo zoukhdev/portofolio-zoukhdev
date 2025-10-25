@@ -21,9 +21,18 @@ export default defineConfig({
     chunkSizeWarningLimit: 1000,
     target: 'esnext',
     minify: 'esbuild',
+    commonjsOptions: {
+      include: [/node_modules/],
+      transformMixedEsModules: true,
+    },
   },
   optimizeDeps: {
-    include: ['react', 'react-dom', '@mui/material', '@mui/icons-material'],
+    include: [
+      'react', 
+      'react-dom', 
+      '@mui/material', 
+      '@mui/icons-material'
+    ]
   },
   esbuild: {
     target: 'esnext',
