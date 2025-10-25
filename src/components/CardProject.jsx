@@ -34,9 +34,17 @@ const CardProject = ({ Img, Title, Description, Link: ProjectLink, id }) => {
               className="w-full h-48 object-cover transform group-hover:scale-105 transition-transform duration-500"
               onError={(e) => {
                 console.error('Image failed to load:', Img);
-                e.target.style.display = 'none';
+                // Try fallback image
+                e.target.src = 'https://via.placeholder.com/400x200/1e293b/ffffff?text=Image+Not+Found';
+              }}
+              onLoad={() => {
+                console.log('Image loaded successfully:', Img);
               }}
             />
+            {/* Debug: Show image path */}
+            <div className="absolute top-0 left-0 bg-black/50 text-white text-xs p-1">
+              {Img}
+            </div>
           </div>
           
           <div className="mt-4 space-y-3 flex-grow flex flex-col">

@@ -187,6 +187,8 @@ export default function FullWidthTabs() {
   // Debug logging
   console.log('Projects:', projects);
   console.log('Displayed Projects:', displayedProjects);
+  console.log('Projects length:', projects.length);
+  console.log('Displayed projects length:', displayedProjects.length);
 
   // Sisa dari komponen (return statement) tidak ada perubahan
   return (
