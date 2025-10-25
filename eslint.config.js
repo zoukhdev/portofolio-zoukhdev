@@ -35,4 +35,20 @@ export default [
       ],
     },
   },
+  {
+    files: [
+      'vite.config.js',
+      'eslint.config.js',
+      '**/*.config.js',
+      '**/*.config.cjs',
+      '**/*.config.mjs',
+    ],
+    languageOptions: {
+      ecmaVersion: 'latest',
+      sourceType: 'module',
+      globals: {
+        ...globals.node,
+      },
+    },
+  },
 ]

@@ -47,12 +47,4 @@ export default defineConfig({
   define: {
     'process.env.VITE_ROLLUP_NATIVE': JSON.stringify('false'),
   },
-  resolve: {
-    alias: {
-      '@babel/runtime/helpers/createSuper': '@babel/runtime/helpers/createSuper',
-      '@babel/runtime/helpers/inherits': '@babel/runtime/helpers/inherits',
-      '@babel/runtime/helpers/possibleConstructorReturn': '@babel/runtime/helpers/possibleConstructorReturn',
-      '@babel/runtime/helpers/getPrototypeOf': '@babel/runtime/helpers/getPrototypeOf',
-    },
-  },
 })
