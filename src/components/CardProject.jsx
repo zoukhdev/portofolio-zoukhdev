@@ -2,6 +2,9 @@ import React from 'react';
 import { ExternalLink, ArrowRight } from 'lucide-react';
 
 const CardProject = ({ Img, Title, Description, Link: ProjectLink, id }) => {
+  // Debug logging
+  console.log('CardProject props:', { Img, Title, Description, ProjectLink, id });
+  
   // Handle kasus ketika ProjectLink kosong
   const handleLiveDemo = (e) => {
     if (!ProjectLink) {
@@ -32,6 +35,13 @@ const CardProject = ({ Img, Title, Description, Link: ProjectLink, id }) => {
               src={Img}
               alt={Title}
               className="w-full h-48 object-cover transform group-hover:scale-105 transition-transform duration-500"
+              onError={(e) => {
+                console.error('Image failed to load:', Img);
+                e.target.style.display = 'none';
+              }}
+              onLoad={() => {
+                console.log('Image loaded successfully:', Img);
+              }}
             />
           </div>
           

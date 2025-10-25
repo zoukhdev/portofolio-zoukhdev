@@ -136,14 +136,18 @@ export default function FullWidthTabs() {
 
   const fetchData = useCallback(async () => {
     try {
+      console.log('Fetching projects from Supabase...');
       // Mengambil data dari Supabase
       const projectsResponse = await supabase.from("projects").select("*").order('id', { ascending: true });
+
+      console.log('Supabase response:', projectsResponse);
 
       // Error handling
       if (projectsResponse.error) throw projectsResponse.error;
 
       // Supabase mengembalikan data dalam properti 'data'
       const projectData = projectsResponse.data || [];
+      console.log('Project data:', projectData);
 
       setProjects(projectData);
 
@@ -178,6 +182,10 @@ export default function FullWidthTabs() {
   }, []);
 
   const displayedProjects = showAllProjects ? projects : projects.slice(0, initialItems);
+  
+  // Debug logging
+  console.log('Projects:', projects);
+  console.log('Displayed Projects:', displayedProjects);
 
   // Sisa dari komponen (return statement) tidak ada perubahan
   return (
