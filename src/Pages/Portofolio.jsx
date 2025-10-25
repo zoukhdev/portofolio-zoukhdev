@@ -73,6 +73,7 @@ ToggleButton.propTypes = {
 };
 
 function TabPanel({ children, value, index, ...other }) {
+  console.log(`TabPanel ${index}: value=${value}, index=${index}, hidden=${value !== index}`);
   return (
     <div
       role="tabpanel"
@@ -126,6 +127,10 @@ export default function FullWidthTabs() {
   const [showAllProjects, setShowAllProjects] = useState(false);
   const isMobile = window.innerWidth < 768;
   const initialItems = isMobile ? 4 : 6;
+  
+  // Debug logging
+  console.log('Tab value:', value);
+  console.log('Projects length:', projects.length);
 
   useEffect(() => {
     AOS.init({
