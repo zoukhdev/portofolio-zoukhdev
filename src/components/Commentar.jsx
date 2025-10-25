@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback, memo } from 'react';
 import { createClient } from '@supabase/supabase-js';
-import { MessageCircle, UserCircle2, Loader2, AlertCircle, Send, ImagePlus, X, Pin } from 'lucide-react';
+import { MessageCircle, UserCircle2, Loader2, AlertCircle, Send, Pin } from 'lucide-react';
 import AOS from "aos";
 import "aos/dist/aos.css";
 import { supabase } from '../supabase';
@@ -21,22 +21,11 @@ const Comment = memo(({ comment, formatDate, index, isPinned = false }) => (
             </div>
         )}
         <div className="flex items-start gap-3">
-            {comment.profile_image ? (
-                <img
-                    src={comment.profile_image}
-                    alt={`${comment.user_name}'s profile`}
-                    className={`w-10 h-10 rounded-full object-cover border-2 flex-shrink-0  ${
-                        isPinned ? 'border-indigo-500/50' : 'border-indigo-500/30'
-                    }`}
-                    loading="lazy"
-                />
-            ) : (
-                <div className={`p-2 rounded-full text-indigo-400 group-hover:bg-indigo-500/30 transition-colors ${
-                    isPinned ? 'bg-indigo-500/30' : 'bg-indigo-500/20'
-                }`}>
-                    <UserCircle2 className="w-5 h-5" />
-                </div>
-            )}
+            <div className={`p-2 rounded-full text-indigo-400 group-hover:bg-indigo-500/30 transition-colors ${
+                isPinned ? 'bg-indigo-500/30' : 'bg-indigo-500/20'
+            }`}>
+                <UserCircle2 className="w-5 h-5" />
+            </div>
             <div className="flex-grow min-w-0">
                 <div className="flex items-center justify-between gap-4 mb-2">
                     <div className="flex items-center gap-2">
@@ -66,35 +55,8 @@ const Comment = memo(({ comment, formatDate, index, isPinned = false }) => (
 const CommentForm = memo(({ onSubmit, isSubmitting, error }) => {
     const [newComment, setNewComment] = useState('');
     const [userName, setUserName] = useState('');
-    const [imagePreview, setImagePreview] = useState(null);
-    const [imageFile, setImageFile] = useState(null);
     const textareaRef = useRef(null);
-    const fileInputRef = useRef(null);
 
-    const handleImageChange = useCallback((e) => {
-        const file = e.target.files[0];
-        if (file) {
-            // Check file size (5MB limit)
-            if (file.size > 5 * 1024 * 1024) {
-                alert('File size must be less than 5MB. Please choose a smaller image.');
-                // Reset the input
-                if (e.target) e.target.value = '';
-                return;
-            }
-            
-            // Check file type
-            if (!file.type.startsWith('image/')) {
-                alert('Please select a valid image file.');
-                if (e.target) e.target.value = '';
-                return;
-            }
-            
-            setImageFile(file);
-            const reader = new FileReader();
-            reader.onloadend = () => setImagePreview(reader.result);
-            reader.readAsDataURL(file);
-        }
-    }, []);
 
     const handleTextareaChange = useCallback((e) => {
         setNewComment(e.target.value);
@@ -108,14 +70,11 @@ const CommentForm = memo(({ onSubmit, isSubmitting, error }) => {
         e.preventDefault();
         if (!newComment.trim() || !userName.trim()) return;
         
-        onSubmit({ newComment, userName, imageFile });
+        onSubmit({ newComment, userName });
         setNewComment('');
         setUserName('');
-        setImagePreview(null);
-        setImageFile(null);
-        if (fileInputRef.current) fileInputRef.current.value = '';
         if (textareaRef.current) textareaRef.current.style.height = 'auto';
-    }, [newComment, userName, imageFile, onSubmit]);
+    }, [newComment, userName, onSubmit]);
 
     return (
         <form onSubmit={handleSubmit} className="space-y-6">
@@ -150,55 +109,6 @@ const CommentForm = memo(({ onSubmit, isSubmitting, error }) => {
                 />
             </div>
 
-            <div className="space-y-2" data-aos="fade-up" data-aos-duration="1400">
-                <label className="block text-sm font-medium text-white">
-                    Profile Photo <span className="text-gray-400">(optional)</span>
-                </label>
-                <div className="flex items-center gap-4 p-4 bg-white/5 border border-white/10 rounded-xl">
-                    {imagePreview ? (
-                        <div className="flex items-center gap-4">
-                            <img
-                                src={imagePreview}
-                                alt="Profile preview"
-                                className="w-16 h-16 rounded-full object-cover border-2 border-indigo-500/50"
-                            />
-                            <button
-                                type="button"
-                                onClick={() => {
-                                    setImagePreview(null);
-                                    setImageFile(null);
-                                    if (fileInputRef.current) fileInputRef.current.value = '';
-                                }}
-                                className="flex items-center gap-2 px-4 py-2 rounded-full bg-red-500/20 text-red-400 hover:bg-red-500/30 transition-all group"
-                            >
-                                <X className="w-4 h-4" />
-                                <span>Remove Photo</span>
-                            </button>
-                        </div>
-                    ) : (
-                        <div className="w-full">
-                            <input
-                                type="file"
-                                ref={fileInputRef}
-                                onChange={handleImageChange}
-                                accept="image/*"
-                                className="hidden"
-                            />
-                            <button
-                                type="button"
-                                onClick={() => fileInputRef.current?.click()}
-                                className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-indigo-500/20 text-indigo-400 hover:bg-indigo-500/30 transition-all border border-dashed border-indigo-500/50 hover:border-indigo-500 group"
-                            >
-                                <ImagePlus className="w-5 h-5 group-hover:scale-110 transition-transform" />
-                                <span>Choose Profile Photo</span>
-                            </button>
-                            <p className="text-center text-gray-400 text-sm mt-2">
-                                Max file size: 5MB
-                            </p>
-                        </div>
-                    )}
-                </div>
-            </div>
 
             <button
                 type="submit"
@@ -305,42 +215,18 @@ const Komentar = () => {
         };
     }, []);
 
-    const uploadImage = useCallback(async (imageFile) => {
-        if (!imageFile) return null;
-        
-        const fileExt = imageFile.name.split('.').pop();
-        const fileName = `${Date.now()}_${Math.random().toString(36).substring(2)}.${fileExt}`;
-        const filePath = `profile-images/${fileName}`;
 
-        const { error: uploadError } = await supabase.storage
-            .from('profile-images')
-            .upload(filePath, imageFile);
-
-        if (uploadError) {
-            throw uploadError;
-        }
-
-        const { data } = supabase.storage
-            .from('profile-images')
-            .getPublicUrl(filePath);
-
-        return data.publicUrl;
-    }, []);
-
-    const handleCommentSubmit = useCallback(async ({ newComment, userName, imageFile }) => {
+    const handleCommentSubmit = useCallback(async ({ newComment, userName }) => {
         setError('');
         setIsSubmitting(true);
         
         try {
-            const profileImageUrl = await uploadImage(imageFile);
-            
             const { error } = await supabase
                 .from('portfolio_comments')
                 .insert([
                     {
                         content: newComment,
                         user_name: userName,
-                        profile_image: profileImageUrl,
                         is_pinned: false,
                         created_at: new Date().toISOString()
                     }
@@ -355,7 +241,7 @@ const Komentar = () => {
         } finally {
             setIsSubmitting(false);
         }
-    }, [uploadImage]);
+    }, []);
 
     const formatDate = useCallback((timestamp) => {
         if (!timestamp) return '';
