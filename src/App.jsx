@@ -8,6 +8,7 @@ import Portofolio from './Pages/Portofolio';
 import Contact from './Pages/Contact';
 import Navbar from './components/Navbar';
 import AnimatedBackground from './components/Background';
+import ChatBot from './components/ChatBot';
 import "./index.css";
 
 function App() {
@@ -55,6 +56,7 @@ function App() {
             <About />
             <Portofolio />
             <Contact />
+            <ChatBot />
           </>
         )}
       </div>
