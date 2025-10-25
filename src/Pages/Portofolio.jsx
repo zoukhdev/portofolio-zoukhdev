@@ -128,10 +128,6 @@ export default function FullWidthTabs() {
   const isMobile = window.innerWidth < 768;
   const initialItems = isMobile ? 4 : 6;
   
-  // Debug logging
-  console.log('Tab value:', value);
-  console.log('Projects length:', projects.length);
-
   useEffect(() => {
     AOS.init({
       once: false,
