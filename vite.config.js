@@ -12,10 +12,17 @@ export default defineConfig({
       output: {
         manualChunks: {
           vendor: ['react', 'react-dom'],
-          mui: ['@mui/material', '@mui/icons-material'],
+          mui: ['@mui/material'],
           router: ['react-router-dom'],
           animation: ['framer-motion', 'gsap', 'aos'],
         },
+      },
+      external: (id) => {
+        // Don't externalize Babel runtime helpers
+        if (id.includes('@babel/runtime')) {
+          return false;
+        }
+        return false;
       },
     },
     chunkSizeWarningLimit: 1000,
@@ -30,14 +37,22 @@ export default defineConfig({
     include: [
       'react', 
       'react-dom', 
-      '@mui/material', 
-      '@mui/icons-material'
-    ]
+      '@mui/material'
+    ],
+    force: true
   },
   esbuild: {
     target: 'esnext',
   },
   define: {
     'process.env.VITE_ROLLUP_NATIVE': JSON.stringify('false'),
+  },
+  resolve: {
+    alias: {
+      '@babel/runtime/helpers/createSuper': '@babel/runtime/helpers/createSuper',
+      '@babel/runtime/helpers/inherits': '@babel/runtime/helpers/inherits',
+      '@babel/runtime/helpers/possibleConstructorReturn': '@babel/runtime/helpers/possibleConstructorReturn',
+      '@babel/runtime/helpers/getPrototypeOf': '@babel/runtime/helpers/getPrototypeOf',
+    },
   },
 })

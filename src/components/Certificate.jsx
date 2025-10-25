@@ -1,7 +1,6 @@
 import React, { useState } from "react"
 import { Modal, IconButton, Box, Fade, Backdrop, Zoom, Typography } from "@mui/material"
-import CloseIcon from "@mui/icons-material/Close"
-import FullscreenIcon from "@mui/icons-material/Fullscreen"
+import { X, Maximize2 } from "lucide-react"
 
 const Certificate = ({ ImgSertif }) => {
 	const [open, setOpen] = useState(false)
@@ -100,10 +99,10 @@ const Certificate = ({ ImgSertif }) => {
 							width: "100%",
 							color: "white",
 						}}>
-						<FullscreenIcon
-							sx={{
-								fontSize: 40,
-								mb: 1,
+						<Maximize2
+							size={40}
+							style={{
+								marginBottom: 8,
 								filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.2))",
 							}}
 						/>
@@ -173,7 +172,7 @@ const Certificate = ({ ImgSertif }) => {
 							},
 						}}
 						size="large">
-						<CloseIcon sx={{ fontSize: 24 }} />
+						<X size={24} />
 					</IconButton>
 
 					{/* Modal Image */}
