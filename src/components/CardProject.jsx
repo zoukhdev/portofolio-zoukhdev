@@ -2,6 +2,9 @@ import React from 'react';
 import { ExternalLink, ArrowRight } from 'lucide-react';
 
 const CardProject = ({ Img, Title, Description, Link: ProjectLink, id }) => {
+  // Convert image path to proper Vite URL
+  const imageSrc = Img.startsWith('/') ? Img : `/${Img}`;
+  
   // Handle kasus ketika ProjectLink kosong
   const handleLiveDemo = (e) => {
     if (!ProjectLink) {
@@ -29,16 +32,18 @@ const CardProject = ({ Img, Title, Description, Link: ProjectLink, id }) => {
         <div className="relative p-5 z-10 flex flex-col h-full">
           <div className="relative overflow-hidden rounded-lg flex-shrink-0">
             <img
-              src={Img}
+              src={imageSrc}
               alt={Title}
               className="w-full h-48 object-cover transform group-hover:scale-105 transition-transform duration-500"
               onError={(e) => {
-                console.error('Image failed to load:', Img);
+                console.error('Image failed to load:', imageSrc);
+                console.error('Original path:', Img);
+                console.error('Trying fallback image...');
                 // Try fallback image
                 e.target.src = 'https://via.placeholder.com/400x200/1e293b/ffffff?text=Image+Not+Found';
               }}
               onLoad={() => {
-                console.log('Image loaded successfully:', Img);
+                console.log('Image loaded successfully:', imageSrc);
               }}
             />
             {/* Debug: Show image path */}
