@@ -73,7 +73,6 @@ ToggleButton.propTypes = {
 };
 
 function TabPanel({ children, value, index, ...other }) {
-  console.log(`TabPanel ${index}: value=${value}, index=${index}, hidden=${value !== index}`);
   return (
     <div
       role="tabpanel"
@@ -137,19 +136,14 @@ export default function FullWidthTabs() {
 
   const fetchData = useCallback(async () => {
     try {
-      console.log('Fetching projects from Supabase...');
       // Mengambil data dari Supabase
       const projectsResponse = await supabase.from("projects").select("*").order('id', { ascending: true });
-
-      console.log('Supabase response:', projectsResponse);
 
       // Error handling
       if (projectsResponse.error) throw projectsResponse.error;
 
       // Supabase mengembalikan data dalam properti 'data'
       const projectData = projectsResponse.data || [];
-      console.log('Project data:', projectData);
-
       setProjects(projectData);
 
       // Store in localStorage
@@ -184,11 +178,6 @@ export default function FullWidthTabs() {
 
   const displayedProjects = showAllProjects ? projects : projects.slice(0, initialItems);
   
-  // Debug logging
-  console.log('Projects:', projects);
-  console.log('Displayed Projects:', displayedProjects);
-  console.log('Projects length:', projects.length);
-  console.log('Displayed projects length:', displayedProjects.length);
 
   // Sisa dari komponen (return statement) tidak ada perubahan
   return (
@@ -311,10 +300,10 @@ export default function FullWidthTabs() {
                     data-aos-duration={index % 3 === 0 ? "1000" : index % 3 === 1 ? "1200" : "1000"}
                   >
                     <CardProject
-                      Img={project.Img}
-                      Title={project.Title}
-                      Description={project.Description}
-                      Link={project.Link}
+                      Img={project.img}
+                      Title={project.title}
+                      Description={project.description}
+                      Link={project.link}
                       id={project.id}
                     />
                   </div>

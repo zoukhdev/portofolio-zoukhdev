@@ -2,11 +2,8 @@ import React from 'react';
 import { ExternalLink, ArrowRight } from 'lucide-react';
 
 const CardProject = ({ Img, Title, Description, Link: ProjectLink, id }) => {
-  // Debug logging
-  console.log('CardProject props:', { Img, Title, Description, ProjectLink, id });
-  
   // Convert image path to proper Vite URL with null check
-  const imageSrc = Img && Img.startsWith('/') ? Img : Img ? `/${Img}` : '/placeholder.jpg';
+  const imageSrc = Img && typeof Img === 'string' && Img.startsWith('/') ? Img : Img && typeof Img === 'string' ? `/${Img}` : '/placeholder.jpg';
   
   // Handle kasus ketika ProjectLink kosong
   const handleLiveDemo = (e) => {
@@ -49,10 +46,6 @@ const CardProject = ({ Img, Title, Description, Link: ProjectLink, id }) => {
                 console.log('Image loaded successfully:', imageSrc);
               }}
             />
-            {/* Debug: Show image path */}
-            <div className="absolute top-0 left-0 bg-black/50 text-white text-xs p-1">
-              {Img}
-            </div>
           </div>
           
           <div className="mt-4 space-y-3 flex-grow flex flex-col">
