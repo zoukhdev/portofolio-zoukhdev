@@ -1,20 +1,20 @@
 import { createClient } from '@supabase/supabase-js';
 
 // Access environment variables using import.meta.env for Vite
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL; 
-const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://tnjujlgzipbxomxikksq.supabase.co'; 
+const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRuanVqbGd6aXBieG9teGlra3NxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg3NjgwODQsImV4cCI6MjA3NDM0NDA4NH0.Vv8raSVDKyj4GtVj920EdJQf4LzxVsL5LnJ5EhQ3CnA';
 
 // Create a mock Supabase client if credentials are missing
 let supabase;
 
-if (!supabaseUrl || !supabaseKey || supabaseUrl === 'https://dummy.supabase.co') {
+if (!supabaseUrl || !supabaseKey || supabaseUrl === 'https://dummy.supabase.co' || supabaseUrl === 'undefined') {
   console.warn("Supabase credentials not configured. Using mock client for development.");
   
   // Create a comprehensive mock Supabase client with all required methods
   supabase = {
     from: (table) => ({
-        select: () => ({
-          order: () => {
+      select: () => ({
+        order: () => {
           if (table === 'projects') {
             return Promise.resolve({ 
               data: [
@@ -97,58 +97,58 @@ if (!supabaseUrl || !supabaseKey || supabaseUrl === 'https://dummy.supabase.co')
             });
           }
           return Promise.resolve({ data: [], error: null });
-        },
-        eq: (column, value) => ({
-          order: () => {
-            if (table === 'comments' || table === 'portfolio_comments') {
-              return Promise.resolve({ 
-                data: [
-                  {
-                    id: 1,
-                    name: "John Doe",
-                    comment: "Great portfolio! Love the design.",
-                    is_pinned: column === 'is_pinned' && value === true,
-                    created_at: new Date().toISOString()
-                  },
-                  {
-                    id: 2,
-                    name: "Jane Smith",
-                    comment: "Amazing work! Very professional.",
-                    is_pinned: false,
-                    created_at: new Date().toISOString()
-                  }
-                ], 
-                error: null 
-              });
-            }
-            return Promise.resolve({ data: [], error: null });
-          },
-          single: () => {
-            if (table === 'portfolio_comments' && column === 'is_pinned' && value === true) {
-              return Promise.resolve({ 
-                data: {
-                  id: 1,
-                  name: "John Doe",
-                  comment: "Great portfolio! Love the design.",
-                  is_pinned: true,
-                  created_at: new Date().toISOString()
-                }, 
-                error: null 
-              });
-            }
-            return Promise.resolve({ data: null, error: { code: 'PGRST116', message: 'No rows found' } });
-          }
-        }),
-        insert: (data) => {
-          return Promise.resolve({ 
-            data: data, 
-            error: null 
-          });
         }
-      })
+      }),
+      eq: (column, value) => ({
+        order: () => {
+          if (table === 'comments' || table === 'portfolio_comments') {
+            return Promise.resolve({ 
+              data: [
+                {
+                  id: 1,
+                  user_name: "John Doe",
+                  content: "Great portfolio! Love the design.",
+                  is_pinned: column === 'is_pinned' && value === true,
+                  created_at: new Date().toISOString()
+                },
+                {
+                  id: 2,
+                  user_name: "Jane Smith",
+                  content: "Amazing work! Very professional.",
+                  is_pinned: false,
+                  created_at: new Date().toISOString()
+                }
+              ], 
+              error: null 
+            });
+          }
+          return Promise.resolve({ data: [], error: null });
+        },
+        single: () => {
+          if (table === 'portfolio_comments' && column === 'is_pinned' && value === true) {
+            return Promise.resolve({ 
+              data: {
+                id: 1,
+                user_name: "John Doe",
+                content: "Great portfolio! Love the design.",
+                is_pinned: true,
+                created_at: new Date().toISOString()
+              }, 
+              error: null 
+            });
+          }
+          return Promise.resolve({ data: null, error: { code: 'PGRST116', message: 'No rows found' } });
+        }
+      }),
+      insert: (data) => {
+        return Promise.resolve({ 
+          data: data, 
+          error: null 
+        });
+      }
     }),
     channel: (name) => ({
-      on: (event) => ({
+      on: (event, options) => ({
         subscribe: () => {
           console.log(`Mock subscription to channel: ${name}, event: ${event}`);
           return { unsubscribe: () => console.log('Mock unsubscribe') };
@@ -156,8 +156,8 @@ if (!supabaseUrl || !supabaseKey || supabaseUrl === 'https://dummy.supabase.co')
       })
     }),
     storage: {
-      from: () => ({
-        upload: (path) => Promise.resolve({ 
+      from: (bucket) => ({
+        upload: (path, file) => Promise.resolve({ 
           data: { path: path }, 
           error: null 
         }),

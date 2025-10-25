@@ -1,12 +1,11 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Share2, User, Mail, MessageSquare, Send } from "lucide-react";
-import { Link } from "react-router-dom";
 import SocialLinks from "../components/SocialLinks";
 import Komentar from "../components/Commentar";
 import Swal from "sweetalert2";
 import AOS from "aos";
 import "aos/dist/aos.css";
-import axios from "axios";
+import emailjs from '@emailjs/browser';
 
 const ContactPage = () => {
   const [formData, setFormData] = useState({
@@ -44,25 +43,22 @@ const ContactPage = () => {
     });
 
     try {
-      // Ganti dengan email Anda di FormSubmit
-      const formSubmitUrl = 'https://formsubmit.co/ekizulfarrachman@gmail.com';
+      // EmailJS configuration
+      const serviceId = 'service_5pvumhf'; // You'll need to create this in EmailJS
+      const templateId = 'template_er68q5s'; // You'll need to create this in EmailJS
+      const publicKey = '0_39ouUhwSa93J1ki'; // You'll need to get this from EmailJS
       
-      // Siapkan data form untuk FormSubmit
-      const submitData = new FormData();
-      submitData.append('name', formData.name);
-      submitData.append('email', formData.email);
-      submitData.append('message', formData.message);
-      submitData.append('_subject', 'New Message from Portfolio Website');
-      submitData.append('_captcha', 'false'); // Nonaktifkan captcha
-      submitData.append('_template', 'table'); // Format email sebagai tabel
+      // Template parameters for EmailJS
+      const templateParams = {
+        from_name: formData.name,
+        from_email: formData.email,
+        message: formData.message,
+        to_email: 'ekizulfarrachman@gmail.com', // Your email
+      };
 
-      await axios.post(formSubmitUrl, submitData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
+      // Send email using EmailJS
+      await emailjs.send(serviceId, templateId, templateParams, publicKey);
 
-     
       Swal.fire({
         title: 'Success!',
         text: 'Your message has been sent successfully!',
@@ -79,29 +75,13 @@ const ContactPage = () => {
       });
 
     } catch (error) {
-      if (error.request && error.request.status === 0) {
-        Swal.fire({
-          title: 'Success!',
-          text: 'Your message has been sent successfully!',
-          icon: 'success',
-          confirmButtonColor: '#6366f1',
-          timer: 2000,
-          timerProgressBar: true
-        });
-
-        setFormData({
-          name: "",
-          email: "",
-          message: "",
-        });
-      } else {
-        Swal.fire({
-          title: 'Failed!',
-          text: 'An error occurred. Please try again later.',
-          icon: 'error',
-          confirmButtonColor: '#6366f1'
-        });
-      }
+      console.error('EmailJS Error:', error);
+      Swal.fire({
+        title: 'Failed!',
+        text: 'An error occurred. Please try again later.',
+        icon: 'error',
+        confirmButtonColor: '#6366f1'
+      });
     } finally {
       setIsSubmitting(false);
     }
@@ -109,7 +89,7 @@ const ContactPage = () => {
 
   return (
     <div className="px-[5%] sm:px-[5%] lg:px-[10%] " >
-      <div className="text-center lg:mt-[5%] mt-10 mb-2 sm:px-0 px-[5%]">
+      <div className="text-center mb-2 sm:px-0 px-[5%]">
         <h2
           data-aos="fade-down"
           data-aos-duration="1000"
@@ -133,7 +113,7 @@ const ContactPage = () => {
           data-aos-duration="1100"
           className="text-slate-400 max-w-2xl mx-auto text-sm md:text-base mt-2"
         >
-          Have a question? Send me a message, and I'll get back to you right away.
+          Have a question? Send me a message, and I&apos;ll get back to you right away.
         </p>
       </div>
 
@@ -152,7 +132,7 @@ const ContactPage = () => {
                   Contact
                 </h2>
                 <p className="text-gray-400">
-                  Anything you'd like to discuss? Send me a message and let's talk.
+                  Anything you&apos;d like to discuss? Send me a message and let&apos;s talk.
                 </p>
               </div>
               <Share2 className="w-10 h-10 text-[#6366f1] opacity-50" />

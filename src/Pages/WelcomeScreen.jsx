@@ -77,23 +77,18 @@ const WelcomeScreen = ({ onLoadingComplete }) => {
   const containerVariants = {
     exit: {
       opacity: 0,
-      scale: 1.1,
-      filter: "blur(10px)",
       transition: {
-        duration: 0.8,
-        ease: "easeInOut",
-        when: "beforeChildren",
-        staggerChildren: 0.1
+        duration: 0.5,
+        ease: "easeInOut"
       }
     }
   };
 
   const childVariants = {
     exit: {
-      y: -20,
       opacity: 0,
       transition: {
-        duration: 0.4,
+        duration: 0.3,
         ease: "easeInOut"
       }
     }

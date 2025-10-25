@@ -1,102 +1,64 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import ErrorBoundary from './components/ErrorBoundary';
+import FallbackContent from './components/FallbackContent';
+import WelcomeScreen from './Pages/WelcomeScreen';
+import Home from './Pages/Home';
+import About from './Pages/About';
+import Portofolio from './Pages/Portofolio';
+import Contact from './Pages/Contact';
+import Navbar from './components/Navbar';
+import AnimatedBackground from './components/Background';
 import "./index.css";
 
 function App() {
-  return (
-    <div style={{ 
-      minHeight: '100vh', 
-      backgroundColor: '#030014', 
-      color: 'white',
-      fontFamily: 'Arial, sans-serif',
-      padding: '20px'
-    }}>
-      <h1 style={{ 
-        fontSize: '3rem', 
-        textAlign: 'center', 
-        marginBottom: '2rem',
-        background: 'linear-gradient(45deg, #6366f1, #a855f7)',
-        WebkitBackgroundClip: 'text',
-        WebkitTextFillColor: 'transparent',
-        backgroundClip: 'text'
-      }}>
-        ZoukhDev Portfolio
-      </h1>
-      
-      <div style={{ 
-        maxWidth: '800px', 
-        margin: '0 auto', 
-        textAlign: 'center',
-        lineHeight: '1.6'
-      }}>
-        <h2 style={{ fontSize: '2rem', marginBottom: '1rem' }}>
-          Frontend Developer
-        </h2>
-        
-        <p style={{ 
-          fontSize: '1.2rem', 
-          marginBottom: '2rem',
-          color: '#ccc'
-        }}>
-          I'm a passionate web developer with expertise in modern technologies and a keen eye for design.
-        </p>
-        
-        <div style={{ 
-          display: 'flex', 
-          gap: '1rem', 
-          justifyContent: 'center',
-          flexWrap: 'wrap'
-        }}>
-          <button style={{
-            padding: '12px 24px',
-            background: 'linear-gradient(45deg, #6366f1, #a855f7)',
-            border: 'none',
-            borderRadius: '8px',
-            color: 'white',
-            fontSize: '1rem',
-            cursor: 'pointer'
-          }}>
-            Get In Touch
+  const [showWelcome, setShowWelcome] = useState(true);
+  const [hasError, setHasError] = useState(false);
+
+  const handleWelcomeComplete = () => {
+    try {
+      setShowWelcome(false);
+      localStorage.setItem('hasVisited', 'true');
+    } catch (error) {
+      console.error('Error during welcome transition:', error);
+      setHasError(true);
+    }
+  };
+
+  if (hasError) {
+    return (
+      <div className="min-h-screen bg-[#030014] flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-4xl font-bold text-white mb-4">Something went wrong</h1>
+          <p className="text-gray-400 mb-6">We're working to fix this issue.</p>
+          <button 
+            onClick={() => window.location.reload()} 
+            className="px-6 py-3 bg-gradient-to-r from-[#6366f1] to-[#a855f7] text-white rounded-lg hover:opacity-80 transition-opacity"
+          >
+            Reload Page
           </button>
-          
-          <button style={{
-            padding: '12px 24px',
-            background: 'transparent',
-            border: '2px solid #6366f1',
-            borderRadius: '8px',
-            color: '#6366f1',
-            fontSize: '1rem',
-            cursor: 'pointer'
-          }}>
-            View My Work
-          </button>
-        </div>
-        
-        <div style={{ 
-          marginTop: '3rem',
-          padding: '2rem',
-          background: 'rgba(255, 255, 255, 0.05)',
-          borderRadius: '12px',
-          border: '1px solid rgba(255, 255, 255, 0.1)'
-        }}>
-          <h3 style={{ fontSize: '1.5rem', marginBottom: '1rem' }}>
-            About Me
-          </h3>
-          <p style={{ color: '#ccc' }}>
-            I specialize in creating immersive, interactive experiences using modern web technologies. 
-            My passion lies in building user-friendly applications that combine functionality with beautiful design.
-          </p>
-        </div>
-        
-        <div style={{ 
-          marginTop: '2rem',
-          padding: '1rem',
-          color: '#999',
-          fontSize: '0.9rem'
-        }}>
-          © 2025 ZoukhDev™. All Rights Reserved.
         </div>
       </div>
-    </div>
+    );
+  }
+
+  return (
+    <ErrorBoundary fallback={<FallbackContent />}>
+      <div className="min-h-screen bg-[#030014]">
+        <AnimatedBackground />
+        
+        {showWelcome ? (
+          <WelcomeScreen onLoadingComplete={handleWelcomeComplete} />
+        ) : (
+          <>
+            <Navbar />
+            <Home />
+            <About />
+            <Portofolio />
+            <Contact />
+          </>
+        )}
+      </div>
+    </ErrorBoundary>
   );
 }
 

@@ -1,6 +1,6 @@
 import React from "react";
 import { CheckCircle } from "lucide-react";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom"; // Removed since we're not using routing
 
 const ThankYouPage = () => {
   return (
@@ -15,12 +15,12 @@ const ThankYouPage = () => {
         <p className="text-gray-400 text-lg mb-8">
           Your message has been received. I'll get back to you as soon as possible.
         </p>
-        <Link
-          to="/"
+        <button
+          onClick={() => window.location.href = '#Home'}
           className="inline-flex items-center justify-center px-8 py-3 bg-gradient-to-r from-[#6366f1] to-[#a855f7] text-white rounded-xl font-semibold transition-all duration-300 hover:scale-[1.02] hover:shadow-lg hover:shadow-[#6366f1]/20 active:scale-[0.98]"
         >
           Back to Home
-        </Link>
+        </button>
       </div>
     </div>
   );
